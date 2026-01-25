@@ -1,0 +1,71 @@
+# user-specific configuration
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+
+# secrets
+secrets.json
+*.pfx
+*.snk
+*.key
+*.cer
+*.crt
+*.pem
+
+# environment files
+.env
+.env.*
+
+# build output or artifacts
+bin/
+obj/
+out/
+publish/
+artifacts/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+
+# NuGet packages
+packages/
+*.nupkg
+*.snupkg
+
+# NuGet cache files
+.nuget/NuGet.Config
+
+*.cache
+*.tmp
+*.log
+*.tlog
+*.rsp
+
+logs/
+*.log
+dump/
+*.dmp
+
+# Azure
+.azure/
+*.publishsettings
+
+# AWS
+.aws/
+
+# Identity / Auth
+identityserver.pfx
+authsettings.json
+
+
