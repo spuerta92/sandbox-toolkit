@@ -244,6 +244,20 @@ VALUES
 ('Greyson Olson', 3, 2, 5, '2021-01-11', NULL);
 GO
 
+-- SQL Authentication
+USE MyCompany
+GO
+
+CREATE LOGIN mycompanyuser WITH PASSWORD = 'HelloWorld2026!',
+DEFAULT_DATABASE = MyCompany;
+GO
+
+CREATE USER mycompanyuser FOR LOGIN mycompanyuser;
+GO
+
+ALTER ROLE db_owner ADD MEMBER mycompanyuser;
+GO
+
 
 
 

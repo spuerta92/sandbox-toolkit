@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Garage\Garage.csproj" />
+    <ProjectReference Include="..\toolbox\toolbox.csproj" />
   </ItemGroup>
 
 </Project>
