@@ -8,11 +8,11 @@ using var channel = await connection.CreateChannelAsync();
 await channel.QueueDeclareAsync(queue: "MyCompany", durable: true, exclusive: false, autoDelete: false,
     arguments: new Dictionary<string, object?> { { "x-queue-type", "quorum" } });
 
-const string message = "Hello World! My Componay";
-var body = Encoding.UTF8.GetBytes(message);
+for (var i = 0; i < 10; i++)
+{
+    var message = $"Hello MyCompany! - {Guid.NewGuid()}";
+    var body = Encoding.UTF8.GetBytes(message);
 
-await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "MyCompany", body: body);
-Console.WriteLine($" [x] Sent {message}");
-
-Console.WriteLine(" Press [enter] to exit.");
-Console.ReadLine();
+    await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "MyCompany", body: body);
+    Thread.Sleep(5000);
+}
