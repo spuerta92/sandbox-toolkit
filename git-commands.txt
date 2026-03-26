@@ -1,0 +1,27 @@
+git clone
+git init
+git status
+git add
+git commit
+git log
+git diff
+git branch
+git checkout
+git switch
+git pull
+git push
+git fetch
+git merge
+git rebase
+git stash
+git restore
+git reset
+git remote -v
+history
+
+-d // delete
+-D // force delete
+-m // message
+-am // add(stage) and message
+-b // branch
+-u // untracked

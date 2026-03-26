@@ -1,0 +1,11 @@
+pwd
+ls
+ls -la
+cd foldername
+cd ..
+mkdir my-folder
+rm file.txt
+rm -rf foldername
+cp source.txt dest.txt
+mv oldname.txt newname.txt
+clear
