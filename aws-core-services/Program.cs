@@ -1,11 +1,25 @@
 ﻿using Amazon;
+using Amazon.CloudWatchLogs;
+using Amazon.EC2;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using Amazon.SimpleNotificationService.Util;
 using Amazon.SQS;
 using Amazon.SQS.Model;
+using CsvHelper;
+using Dapper;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using System.Data;
+using System.Globalization;
+using System.IO.Compression;
+using System.Net.Mime;
 using toolbox.Enums;
 using toolbox.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 static class Program
 {
@@ -117,7 +131,7 @@ static class Program
         return response.SubscriptionArn;
     }
 
-    static async Task<List<Message>> ReceiveMessagesByUrl(IAmazonSQS sqsClient, string queueUrl, int maxMessages)
+    static async Task<List<Amazon.SQS.Model.Message>> ReceiveMessagesByUrl(IAmazonSQS sqsClient, string queueUrl, int maxMessages)
     {
         // https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html
         var messageResponse = await sqsClient.ReceiveMessageAsync(
@@ -128,6 +142,58 @@ static class Program
                 WaitTimeSeconds = 1
             });
         return messageResponse.Messages;
+    }
+
+    static async Task<byte[]> CreateCsvFile<T>(IEnumerable<T> data)
+    {
+        using (var memoryStream = new MemoryStream())
+        using (var writer = new StreamWriter(memoryStream))
+        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+        {
+            csv.WriteHeader<T>();
+            await csv.WriteRecordsAsync(data);
+            await csv.FlushAsync();
+            return memoryStream.ToArray();
+        }
+    }
+
+    static async Task<bool> CreateBucketWithObjectLock(IAmazonS3 client, string bucketName, bool enableObjectLock)
+    {
+        try
+        {
+            var request = new PutBucketRequest
+            {
+                BucketName = bucketName,
+                UseClientRegion = true,
+                ObjectLockEnabledForBucket = enableObjectLock,
+            };
+
+            var response = await client.PutBucketAsync(request);
+
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            Console.WriteLine($"Error creating bucket: '{ex.Message}'");
+            return false;
+        }
+    }
+
+    static async Task PublishObjectToS3Async(IAmazonS3 client, string bucketName, string keyName, byte[] fileBytes, string contentType)
+    {
+        using (var newMemoryStream = new MemoryStream(fileBytes))
+        {
+            var uploadRequest = new TransferUtilityUploadRequest
+            {
+                InputStream = newMemoryStream,
+                Key = keyName,
+                BucketName = bucketName,
+                ContentType = contentType
+            };
+
+            var fileTransferUtility = new TransferUtility(client);
+            await fileTransferUtility.UploadAsync(uploadRequest);
+        }
     }
 
     static async Task Main()
@@ -169,21 +235,41 @@ static class Program
         Console.WriteLine(JsonConvert.SerializeObject(messages, Formatting.Indented));
 
         // store message in the database
-        foreach(var message in messages)
+        const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=MyCompany; Integrated Security=true; Trusted_Connection=true;";
+        foreach (var message in messages)
         {
-
+            using (IDbConnection dbConnection = new SqlConnection(connectionString))
+            {
+                var parameters = new { MessageBody = message.Body };
+                await dbConnection.ExecuteAsync("dbo.InsertQueueMessages", parameters, commandType: CommandType.StoredProcedure);
+            }
         }
 
         // generate csv 
+        IEnumerable<QueueMessage> retrievedMessages = null;
+        using (IDbConnection dbConnection = new SqlConnection(connectionString))
+        {
+            retrievedMessages = await dbConnection.QueryAsync<QueueMessage>("dbo.GetQueueMessages", null, commandType: CommandType.StoredProcedure);
+        }
+
+        if (retrievedMessages == null)
+        {
+            Console.WriteLine("No message retrieved from sns queue");
+            return;
+        }
+
+        var csvBytes = await CreateCsvFile<QueueMessage>(retrievedMessages);
 
         // publish csv to s3 + add lifecycle rules
+        var s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
+        var bucketName = "my-local-test-company-bucket";
+        await CreateBucketWithObjectLock(s3Client, bucketName, false);
+        await PublishObjectToS3Async(s3Client, bucketName, "/local/messages/data.csv", csvBytes, "text/csv");
 
         // log to cloudwatch once csv is published
+        var cloudWatchClient = new AmazonCloudWatchLogsClient(RegionEndpoint.USEast1);
 
         // create / start ec2 (virtual machine)
-
-        // create / start ecs (container)
-
-        // create lambda function
+        var ec2Client = new AmazonEC2Client(RegionEndpoint.USEast1);
     }
 }

@@ -43,6 +43,12 @@ CREATE TABLE dbo.Projects (
 	CONSTRAINT PK_Projects PRIMARY KEY CLUSTERED (ProjectId)
 )
 
+CREATE TABLE dbo.QueueMessages (
+	MessageId INT NOT NULL IDENTITY(1,1),
+	MessageBody NVARCHAR(256) NULL,
+	SysStartTime DATETIME NOT NULL CONSTRAINT DF_QueueMessages_SysStartTime  DEFAULT GETDATE()
+)
+
 -- ALTER
 ALTER TABLE dbo.Employees
 ADD CONSTRAINT FK_Employees_Roles
