@@ -13,7 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "toolbox", "toolbox\toolbox.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		mycompany-raw.sql = mycompany-raw.sql
+		mycompany.sql = mycompany.sql
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dapper-orm", "dapper-orm\dapper-orm.csproj", "{2A1907AA-B4F4-49CC-90D3-89CC64330DC5}"
@@ -23,6 +26,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rabbitmq-receiver", "rabbitmq-receiver\rabbitmq-receiver.csproj", "{0AA3A58A-E79C-4220-8B9A-9568E74B199C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "background-jobs", "background-jobs\background-jobs.csproj", "{779FFB32-09F3-4440-BC8D-E5767050583F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fsharpbasics", "fsharpbasics\fsharpbasics.fsproj", "{1DB30142-42B9-A83F-0769-569F18890606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aws-core-services", "aws-core-services\aws-core-services.csproj", "{DD61A113-7B58-4FE5-B7C0-6CAADCE373B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +69,14 @@ Global
 		{779FFB32-09F3-4440-BC8D-E5767050583F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{779FFB32-09F3-4440-BC8D-E5767050583F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{779FFB32-09F3-4440-BC8D-E5767050583F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DB30142-42B9-A83F-0769-569F18890606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB30142-42B9-A83F-0769-569F18890606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB30142-42B9-A83F-0769-569F18890606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB30142-42B9-A83F-0769-569F18890606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD61A113-7B58-4FE5-B7C0-6CAADCE373B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD61A113-7B58-4FE5-B7C0-6CAADCE373B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD61A113-7B58-4FE5-B7C0-6CAADCE373B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD61A113-7B58-4FE5-B7C0-6CAADCE373B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

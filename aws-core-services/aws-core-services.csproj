@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>aws_core_services</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.8.1" />
+    <PackageReference Include="AWS.Logger.Core" Version="4.0.2" />
+    <PackageReference Include="AWSSDK.Core" Version="4.0.3.21" />
+    <PackageReference Include="AWSSDK.EC2" Version="4.0.82" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.19.1" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="4.0.2.20" />
+    <PackageReference Include="AWSSDK.SQS" Version="4.0.2.18" />
+    <PackageReference Include="Csv" Version="2.0.217" />
+    <PackageReference Include="Dapper" Version="2.1.72" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\toolbox\toolbox.csproj" />
+  </ItemGroup>
+
+</Project>
