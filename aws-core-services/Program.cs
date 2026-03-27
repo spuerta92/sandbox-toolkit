@@ -1,5 +1,6 @@
 ﻿using Amazon;
 using Amazon.CloudWatchLogs;
+using Amazon.CloudWatchLogs.Model;
 using Amazon.EC2;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -86,7 +87,7 @@ static class Program
 
     static async Task SetQueuePolicyAsync(IAmazonSQS sqsClient, string queueUrl, string queueArn, string topicArn)
     {
-        var policy = new Policy
+        var policy = new toolbox.Models.Policy
         {
             //Version = DateTime.Now.ToString("yyyy-MM-dd"),
             Statement = new Statement
@@ -196,8 +197,28 @@ static class Program
         }
     }
 
+    static async Task ConfigureCloudWatchLogs(IAmazonCloudWatchLogs client, string logGroupName, string logStreamName)
+    {
+        // log group
+        var logGroup = new CreateLogGroupRequest
+        {
+            LogGroupName = logGroupName,
+        };
+
+        await client.CreateLogGroupAsync(logGroup);
+
+        // log stream
+        var logStream = new CreateLogStreamRequest
+        {
+            LogGroupName = logGroupName,
+            LogStreamName = logStreamName,
+        };
+
+        await client.CreateLogStreamAsync(logStream);
+    }
+
     /// <summary>
-    /// Testing out AWS SDK core services S3, SNS, SQS, EC2, Cloudwatch logs
+    /// Testing out AWS SDK core services S3, SNS, SQS, EC2, Cloudwatch
     /// </summary>
     /// <returns></returns>
     static async Task Main()
@@ -272,8 +293,26 @@ static class Program
 
         // log to cloudwatch once csv is published
         var cloudWatchClient = new AmazonCloudWatchLogsClient(RegionEndpoint.USEast1);
+        var logGroup = "cloudwatchlogs-mycompany-loggroup";
+        var logStream = "cloudwatchlogs-mycompany-logstream";
+        await ConfigureCloudWatchLogs(cloudWatchClient, logGroup, logStream);
+        var logEvent = new PutLogEventsRequest
+        {
+            LogGroupName = logGroup,
+            LogStreamName = logStream,
+            LogEvents = new List<InputLogEvent> 
+            { 
+                new InputLogEvent
+                {
+                    Message = "Hello from mycompany! the csv file with the message was published to s3",
+                    Timestamp = DateTime.Now
+                }
+            }
+        };
+        await cloudWatchClient.PutLogEventsAsync(logEvent);
 
         // create / start ec2 (virtual machine)
-        var ec2Client = new AmazonEC2Client(RegionEndpoint.USEast1);
+        //var ec2Client = new AmazonEC2Client(RegionEndpoint.USEast1);
+        
     }
 }
