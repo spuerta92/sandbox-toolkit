@@ -7,7 +7,11 @@ using toolbox.Extensions;
 using toolbox.Models;
 using toolbox.Records;
 
-static class Program {
+static class Program 
+{
+    /// <summary>
+    /// Dapper orm overview
+    /// </summary>
     static void Main()
     {
         const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB; Initial Catalog=MyCompany; Integrated Security=true; Trusted_Connection=true;";

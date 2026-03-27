@@ -196,6 +196,10 @@ static class Program
         }
     }
 
+    /// <summary>
+    /// Testing out AWS SDK core services S3, SNS, SQS, EC2, Cloudwatch logs
+    /// </summary>
+    /// <returns></returns>
     static async Task Main()
     {
         // create sns topic

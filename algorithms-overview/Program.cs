@@ -11,6 +11,95 @@ static class Program
         return list;
     }
 
+    static List<int> MergeSort(List<int> list)
+    {
+        // time complexity
+
+        // algorithm
+
+        return list;
+    }
+
+    static List<int> QuickSort(List<int> list)
+    {
+        // time complexity
+
+        // algorithm
+
+        return list;
+    }
+
+    static Tuple<int, int> LinearSearch(List<int> list, int target)
+    {
+        // time complexity
+
+        // algorithm
+        var index = 0;
+        var count = 0;
+
+        return new Tuple<int, int>(index, count);
+    }
+
+    static Tuple<int, int> BinarySearch(List<int> list, int target)
+    {
+        // time complexity
+
+        // algorithm
+        var index = 0;
+        var count = 0;
+
+        return new Tuple<int, int>(index, count);
+    }
+
+    static Tuple<int, int> BreadthFirstSearch(List<int> list, int target)
+    {
+        // time complexity
+
+        // algorithm
+        var index = 0;
+        var count = 0;
+
+        return new Tuple<int, int>(index, count);
+    }
+
+    static Tuple<int, int> DepthFirstSearch(List<int> list, int target)
+    {
+        // time complexity
+
+        // algorithm
+        var index = 0;
+        var count = 0;
+
+        return new Tuple<int, int>(index, count);
+    }
+
+    static int Hashing()
+    {
+        // time complexity
+
+        // algorithm
+        var hashing = 0;
+
+        return hashing;
+    }
+
+    static int Recursion(int input, int count)
+    {
+        if (count > 100) return count;
+        count = count + 1;
+        var result = input + Recursion(input, count);
+        for (var i = 0; i < count; i++)
+        {
+            Console.Write("|");
+        }
+        Console.Write($"--> {count}");
+        Console.WriteLine();
+        return result;
+    }
+
+    /// <summary>
+    /// Overview of core algorithms
+    /// </summary>
     static void Main()
     {
         var numbers = new List<int>
@@ -32,23 +121,32 @@ static class Program
         Console.WriteLine(JsonConvert.SerializeObject(heap_sorted));
 
         // merge sort
+        var merge_sorted = MergeSort(numbers);
+        Console.WriteLine(JsonConvert.SerializeObject(heap_sorted));
 
         // quick sort
+        var quick_sorted = QuickSort(numbers);
+        Console.WriteLine(JsonConvert.SerializeObject(heap_sorted));
 
         // linear search
+        var linearResult = LinearSearch(numbers, 446);
+        Console.WriteLine($"index: {linearResult.Item1}, count: {linearResult.Item2}");
 
         // binary search
+        var binaryResult = BinarySearch(numbers, 446);
+        Console.WriteLine($"index: {binaryResult.Item1}, count: {binaryResult.Item2}");
 
         // breadth-first search
+        var bfsResult = BreadthFirstSearch(numbers, 446);
+        Console.WriteLine($"index: {bfsResult.Item1}, count: {bfsResult.Item2}");
 
         // depth-first search
+        var dfsResult = DepthFirstSearch(numbers, 446);
+        Console.WriteLine($"index: {dfsResult.Item1}, count: {dfsResult.Item2}");
 
-        // hashing
+        // hashing (function used in hash tables)
 
         // recursion
-
-        // trees
-
-        // graphs
+        Recursion(1, 0);
     }
 }
