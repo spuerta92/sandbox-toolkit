@@ -1,6 +1,6 @@
-@core_rest_api_HostAddress = http://localhost:5083
+@core_rest_api_HostAddress = http://localhost:5083/api/v1/employees
 
-GET {{core_rest_api_HostAddress}}/weatherforecast/
+GET {{core_rest_api_HostAddress}}/getemployees
 Accept: application/json
 
 ###
