@@ -11,7 +11,7 @@ static class Program
         {
             Source = "MyCompanyApp"
         };
-        eventLog.WriteEntry("Hello World from event viewver logger", EventLogEntryType.Information);
+        eventLog.WriteEntry("Hello World from event viewer logger", EventLogEntryType.Information);
 
         // serilog 
         string root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
