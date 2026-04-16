@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace object_oriented_programming_overview
+namespace object_oriented_programming_overview.src
 {
     /// <summary>
     /// Encapsulation

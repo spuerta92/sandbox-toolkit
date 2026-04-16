@@ -1,10 +1,11 @@
-﻿using System;
+﻿using object_oriented_programming_overview.src;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace object_oriented_programming_overview.Animals
+namespace object_oriented_programming_overview.src.Animals
 {
     public class Lion : Animal
     {

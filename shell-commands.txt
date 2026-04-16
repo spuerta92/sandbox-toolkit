@@ -9,3 +9,6 @@ rm -rf foldername
 cp source.txt dest.txt
 mv oldname.txt newname.txt
 clear
+
+ipconfig --> get local machine ip address
+hostname --> get local machine name

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace object_oriented_programming_overview
+namespace object_oriented_programming_overview.src
 {
     /// <summary>
     /// "CAN-HAVE" relationship

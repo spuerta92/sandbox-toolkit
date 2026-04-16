@@ -1,6 +1,7 @@
 ﻿using object_oriented_programming_overview;
-using object_oriented_programming_overview.Animals;
-using object_oriented_programming_overview.Fruits;
+using object_oriented_programming_overview.src.Animals;
+using object_oriented_programming_overview.src.Fruits;
+using object_oriented_programming_overview.src;
 
 public class Program
 {
