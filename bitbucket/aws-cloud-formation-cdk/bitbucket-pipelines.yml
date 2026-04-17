@@ -1,0 +1,57 @@
+image: node:18
+
+definitions:
+  steps:
+    - step: &build
+        name: Build CDK Project
+        caches:
+          - node
+        script:
+          - npm ci
+          - npm run build
+        artifacts:
+          - node_modules/**
+          - bin/**
+          - lib/**
+          - cdk.out/**
+
+    - step: &deploy
+        name: Deploy with CDK
+        script:
+          - npm install -g aws-cdk
+          - cdk synth -c environment=$ENVIRONMENT
+          - cdk deploy --require-approval never -c environment=$ENVIRONMENT
+
+pipelines:
+  branches:
+    main:
+      - step:
+          <<: *build
+      - step:
+          name: Deploy to Production
+          deployment: production
+          script:
+            - export ENVIRONMENT=prod
+            - export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+            - npm install -g aws-cdk
+            - cdk synth -c environment=$ENVIRONMENT
+            - cdk deploy --require-approval never -c environment=$ENVIRONMENT
+
+  custom:
+    deploy-manual:
+      - variables:
+          - name: ENVIRONMENT
+            default: dev
+            allowed-values:
+              - dev
+              - staging
+              - prod
+      - step:
+          <<: *build
+      - step:
+          name: Manual Deploy
+          script:
+            - export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+            - npm install -g aws-cdk
+            - cdk synth -c environment=$ENVIRONMENT
+            - cdk deploy --require-approval never -c environment=$ENVIRONMENT

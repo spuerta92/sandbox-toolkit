@@ -1,0 +1,46 @@
+image: atlassian/default-image:3
+
+definitions:
+  services:
+    docker:
+      memory: 2048
+
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Deploy to Production
+          deployment: production
+          script:
+            - pipe: atlassian/aws-cloudformation-deploy:0.15.1
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                STACK_NAME: 'sns-sqs-s3-stack-prod'
+                TEMPLATE: 'cft-init.yml'
+                STACK_PARAMETERS: >
+                  [
+                    {
+                      "ParameterKey": "Environment",
+                      "ParameterValue": "prod"
+                    }
+                  ]
+                CAPABILITIES: '["CAPABILITY_IAM"]'
+                WAIT: 'true'
+
+  custom:
+    deploy-manual:
+      - step:
+          name: Manual Deploy
+          script:
+            - pipe: atlassian/aws-cloudformation-deploy:0.15.1
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                STACK_NAME: $STACK_NAME
+                TEMPLATE: 'cft-init.yml'
+                STACK_PARAMETERS: $STACK_PARAMETERS
+                CAPABILITIES: '["CAPABILITY_IAM"]'
+                WAIT: 'true'
