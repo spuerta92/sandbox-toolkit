@@ -1,0 +1,81 @@
+image: python:3.11-slim
+
+variables:
+  AWS_DEFAULT_REGION: us-east-1
+  STACK_NAME_PROD: 'sns-sqs-s3-stack-prod'
+  TEMPLATE_FILE: 'cft-init.yml'
+
+stages:
+  - validate
+  - deploy
+
+# Validate CloudFormation template on all branches
+validate:
+  stage: validate
+  script:
+    - echo "Installing AWS CLI..."
+    - python3 -m venv /tmp/venv
+    - source /tmp/venv/bin/activate
+    - pip install awscli --quiet
+    - echo "Validating CloudFormation template..."
+    - aws cloudformation validate-template --template-body file://${TEMPLATE_FILE}
+    - echo "Template validation successful!"
+
+# Reusable deployment template
+.deploy_template:
+  stage: deploy
+  before_script:
+    - echo "Setting up AWS CLI..."
+    - python3 -m venv /tmp/venv
+    - source /tmp/venv/bin/activate
+    - pip install awscli --quiet
+  script:
+    - echo "Deploying CloudFormation stack ${STACK_NAME}..."
+    - |
+      aws cloudformation deploy \
+        --template-file ${TEMPLATE_FILE} \
+        --stack-name ${STACK_NAME} \
+        --parameter-overrides Environment=${ENVIRONMENT} \
+        --capabilities CAPABILITY_IAM \
+        --no-fail-on-empty-changeset \
+        --region ${AWS_DEFAULT_REGION}
+    - echo "Waiting for stack to complete..."
+    - |
+      aws cloudformation wait stack-update-complete \
+        --stack-name ${STACK_NAME} \
+        --region ${AWS_DEFAULT_REGION} 2>/dev/null || \
+      aws cloudformation wait stack-create-complete \
+        --stack-name ${STACK_NAME} \
+        --region ${AWS_DEFAULT_REGION}
+    - echo "Retrieving stack outputs..."
+    - |
+      aws cloudformation describe-stacks \
+        --stack-name ${STACK_NAME} \
+        --region ${AWS_DEFAULT_REGION} \
+        --query 'Stacks[0].Outputs' \
+        --output table
+    - echo "Deployment completed successfully!"
+
+# Automatic deployment to production on main branch
+deploy:production:
+  extends: .deploy_template
+  environment:
+    name: production
+  variables:
+    STACK_NAME: ${STACK_NAME_PROD}
+    ENVIRONMENT: 'prod'
+  only:
+    - main
+    - master
+
+# Manual deployment with custom parameters
+deploy:manual:
+  extends: .deploy_template
+  when: manual
+  variables:
+    STACK_NAME: ${STACK_NAME}
+    ENVIRONMENT: ${ENVIRONMENT}
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "api"'
+    - when: manual
