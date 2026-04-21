@@ -36,9 +36,9 @@ This solution contains multiple projects where I have attempted individual build
 
 ## GITHUB Build / Deployment 
 ### Deployed using Github Workflow Actions
-- Deploy base static html to AWS S3: 
-- Create AWS Resources (SNS, SQS, and S3) using Cloud Formation Template: 
-- Create AWS Resources (SNS, SQS, and S3) using CDK: 
+- Deploy base static html to AWS S3: https://github.com/spuerta92/deploy-test
+- Create AWS Resources (SNS, SQS, and S3) using Cloud Formation Template: https://github.com/spuerta92/sandbox-aws-cloud-formation 
+- Create AWS Resources (SNS, SQS, and S3) using CDK: https://github.com/spuerta92/sandbox-aws-cdk
 
 ### Technology
 .NET 8, C#, F#, TypeScript, HTML, CSS, Angular, Vue, Angular
