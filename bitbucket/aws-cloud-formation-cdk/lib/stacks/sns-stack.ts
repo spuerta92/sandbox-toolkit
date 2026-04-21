@@ -21,13 +21,13 @@ export class SnsStack extends cdk.Stack {
 
     // SNS Topic
     this.topic = new sns.Topic(this, 'NotificationTopic', {
-      topicName: `${environment}-notification-topic`,
-      displayName: `${environment} Notification Topic`,
+      topicName: `${environment}-v1-notification-topic`,
+      displayName: `${environment} V1 Notification Topic`,
     });
 
     // SQS Queue
     this.queue = new sqs.Queue(this, 'NotificationQueue', {
-      queueName: `${environment}-notification-queue`,
+      queueName: `${environment}-v1-notification-queue`,
       visibilityTimeout: cdk.Duration.seconds(300),
       retentionPeriod: cdk.Duration.days(14),
       receiveMessageWaitTime: cdk.Duration.seconds(20), // Enable long polling
@@ -42,7 +42,7 @@ export class SnsStack extends cdk.Stack {
 
     // S3 Bucket with Lifecycle Policies
     this.bucket = new s3.Bucket(this, 'StorageBucket', {
-      bucketName: `${environment}-storage-bucket-${cdk.Stack.of(this).account}`,
+      bucketName: `${environment}-v1-storage-bucket-${cdk.Stack.of(this).account}`,
       versioned: true,
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,

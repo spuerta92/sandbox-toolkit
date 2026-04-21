@@ -6,6 +6,12 @@
 # Node artifact files
 node_modules/
 dist/
+*.assets.json
+*.metadata.json
+*.template.json
+*.lock
+manifest.json
+tree.json
 
 # Compiled Java class files
 *.class
